@@ -724,7 +724,7 @@ class MeanAveragePrecision:
     @staticmethod
     def compute_average_precision(recall: np.ndarray, precision: np.ndarray) -> float:
         """
-        Compute the average precision using 101-point interpolation (COCO), given
+        Computes the average precision using 101-point interpolation (COCO), given
             the recall and precision curves.
 
         Args:
@@ -743,7 +743,7 @@ class MeanAveragePrecision:
         interpolated_precision = np.interp(
             interpolated_recall_levels, extended_recall, max_accumulated_precision
         )
-        average_precision = np.trapz(interpolated_precision, interpolated_recall_levels)
+        average_precision = np.trapezoid(interpolated_precision, interpolated_recall_levels)
         return average_precision
 
     @staticmethod

@@ -16,7 +16,40 @@
 
 ## 👋 hello
 
-**We write your reusable computer vision tools.** Whether you need to load your dataset from your hard drive, draw detections on an image or video, or count how many detections are in a zone. You can count on us! 🤝
+**We write your reusable computer vision tools. 💜**
+
+## Project Overview
+
+Supervision is an open-source Python library designed to simplify the development of computer vision applications. It provides a collection of modular, reusable tools that address common tasks in computer vision, such as object detection, tracking, annotation, and dataset management. By leveraging Supervision, developers can accelerate their workflows, reduce complexity, and focus on building innovative solutions.
+
+### Key Features
+
+- **Model Agnostic**: Supports various computer vision models, including Ultralytics, Transformers, and MMDetection.
+- **Inference**: Easily integrate with Roboflow for model inference.
+- **Annotators**: Provides tools for annotating images and videos with bounding boxes, masks, and more.
+- **Datasets**: Simplifies loading, splitting, merging, and saving datasets in popular formats like COCO, YOLO, and Pascal VOC.
+
+### Goals
+
+The Supervision project aims to:
+
+- **Enhance System Monitoring**: Offer real-time insights into the performance of computer vision models, detecting anomalies and ensuring optimal operation.
+- **Improve Security & Compliance**: Ensure the library adheres to security best practices and industry standards, protecting user data and ensuring compliance.
+- **Optimize Performance**: Provide efficient, optimized code that leverages hardware acceleration where possible.
+- **User-Friendly Interface**: Develop an intuitive API with comprehensive documentation and examples to make it accessible to developers of all levels.
+- **Scalability**: Support large-scale datasets and real-time processing requirements, making it suitable for both small projects and enterprise-level applications.
+
+### Why Supervision?
+
+Developing computer vision applications can be complex and time-consuming, requiring expertise in multiple areas such as object detection, tracking, annotation, and dataset management. Supervision addresses this by providing a unified, easy-to-use interface for these common tasks, allowing developers to focus on their specific application logic rather than reinventing the wheel.
+
+### Expected Outcomes
+
+By using Supervision, developers can expect to:
+
+- Reduce development time for computer vision projects.
+- Improve the reliability and performance of their vision systems.
+- Benefit from a community-driven library that is continuously updated and improved.
 
 ## 💻 install
 
