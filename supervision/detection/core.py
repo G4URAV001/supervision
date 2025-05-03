@@ -1113,7 +1113,7 @@ class Detections:
                 `Position` enum.
 
         Returns:
-            np.ndarray: An array of shape `(n, 2)`, where `n` is the number of bounding
+            np.ndarray: An array of shape `(n, 1, 2)`, where `n` is the number of bounding
                 boxes. Each row contains the `[x, y]` coordinates of the specified
                 anchor point for the corresponding bounding box.
 
@@ -1121,7 +1121,7 @@ class Detections:
             ValueError: If the provided `anchor` is not supported.
         """
         if anchor == Position.CENTER:
-            return np.array(
+            coords = np.array(
                 [
                     (self.xyxy[:, 0] + self.xyxy[:, 2]) / 2,
                     (self.xyxy[:, 1] + self.xyxy[:, 3]) / 2,
@@ -1132,39 +1132,42 @@ class Detections:
                 raise ValueError(
                     "Cannot use `Position.CENTER_OF_MASS` without a detection mask."
                 )
-            return calculate_masks_centroids(masks=self.mask)
+            coords = calculate_masks_centroids(masks=self.mask)
         elif anchor == Position.CENTER_LEFT:
-            return np.array(
+            coords = np.array(
                 [
                     self.xyxy[:, 0],
                     (self.xyxy[:, 1] + self.xyxy[:, 3]) / 2,
                 ]
             ).transpose()
         elif anchor == Position.CENTER_RIGHT:
-            return np.array(
+            coords = np.array(
                 [
                     self.xyxy[:, 2],
                     (self.xyxy[:, 1] + self.xyxy[:, 3]) / 2,
                 ]
             ).transpose()
         elif anchor == Position.BOTTOM_CENTER:
-            return np.array(
+            coords = np.array(
                 [(self.xyxy[:, 0] + self.xyxy[:, 2]) / 2, self.xyxy[:, 3]]
             ).transpose()
         elif anchor == Position.BOTTOM_LEFT:
-            return np.array([self.xyxy[:, 0], self.xyxy[:, 3]]).transpose()
+            coords = np.array([self.xyxy[:, 0], self.xyxy[:, 3]]).transpose()
         elif anchor == Position.BOTTOM_RIGHT:
-            return np.array([self.xyxy[:, 2], self.xyxy[:, 3]]).transpose()
+            coords = np.array([self.xyxy[:, 2], self.xyxy[:, 3]]).transpose()
         elif anchor == Position.TOP_CENTER:
-            return np.array(
+            coords = np.array(
                 [(self.xyxy[:, 0] + self.xyxy[:, 2]) / 2, self.xyxy[:, 1]]
             ).transpose()
         elif anchor == Position.TOP_LEFT:
-            return np.array([self.xyxy[:, 0], self.xyxy[:, 1]]).transpose()
+            coords = np.array([self.xyxy[:, 0], self.xyxy[:, 1]]).transpose()
         elif anchor == Position.TOP_RIGHT:
-            return np.array([self.xyxy[:, 2], self.xyxy[:, 1]]).transpose()
-
-        raise ValueError(f"{anchor} is not supported.")
+            coords = np.array([self.xyxy[:, 2], self.xyxy[:, 1]]).transpose()
+        else:
+            raise ValueError(f"{anchor} is not supported.")
+            
+        # Convert 2D array (n, 2) to 3D array (n, 1, 2) to address NumPy 2.0 deprecation warning
+        return coords.reshape(coords.shape[0], 1, 2)
 
     def __getitem__(
         self, index: Union[int, slice, List[int], np.ndarray, str]

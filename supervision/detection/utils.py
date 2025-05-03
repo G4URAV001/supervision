@@ -836,8 +836,10 @@ def calculate_masks_centroids(masks: np.ndarray) -> np.ndarray:
             Each 2D array in the tensor represents a binary mask.
 
     Returns:
-        A 2D NumPy array of shape (num_masks, 2), where each row contains the x and y
+        A 3D NumPy array of shape (num_masks, 1, 2), where each row contains the x and y
             coordinates (in that order) of the centroid of the corresponding mask.
+            The middle dimension of size 1 is added to comply with NumPy 2.0's
+            requirement for 3D vector arrays.
     """
     num_masks, height, width = masks.shape
     total_pixels = masks.sum(axis=(1, 2))
@@ -854,7 +856,11 @@ def calculate_masks_centroids(masks: np.ndarray) -> np.ndarray:
     centroid_x = sum_over_mask(horizontal_indices, aggregation_axis) / total_pixels
     centroid_y = sum_over_mask(vertical_indices, aggregation_axis) / total_pixels
 
-    return np.column_stack((centroid_x, centroid_y)).astype(int)
+    # Create 2D array first
+    centroids_2d = np.column_stack((centroid_x, centroid_y)).astype(int)
+    
+    # Reshape to 3D array (num_masks, 1, 2) to address NumPy 2.0 deprecation warning
+    return centroids_2d.reshape(centroids_2d.shape[0], 1, 2)
 
 
 def is_data_equal(data_a: Dict[str, np.ndarray], data_b: Dict[str, np.ndarray]) -> bool:

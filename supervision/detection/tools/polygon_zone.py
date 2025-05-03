@@ -91,15 +91,19 @@ class PolygonZone:
             xyxy=detections.xyxy, resolution_wh=self.frame_resolution_wh
         )
         clipped_detections = replace(detections, xyxy=clipped_xyxy)
+        
+        # Get anchors coordinates (now in 3D format (n, 1, 2))
         all_clipped_anchors = np.array(
             [
                 np.ceil(clipped_detections.get_anchors_coordinates(anchor)).astype(int)
                 for anchor in self.triggering_anchors
             ]
         )
-
+        
+        # Reshape to handle 3D arrays - all_clipped_anchors is now shape (num_anchors, num_detections, 1, 2)
+        # We need to access coordinates correctly for the mask indexing
         is_in_zone: npt.NDArray[np.bool_] = (
-            self.mask[all_clipped_anchors[:, :, 1], all_clipped_anchors[:, :, 0]]
+            self.mask[all_clipped_anchors[:, :, 0, 1], all_clipped_anchors[:, :, 0, 0]]
             .transpose()
             .astype(bool)
         )
