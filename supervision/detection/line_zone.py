@@ -271,21 +271,27 @@ class LineZone:
         assert len(detections) > 0
         assert detections.tracker_id is not None
 
+        # Get anchors coordinates - now returns 3D arrays with shape (n, 1, 2)
         all_anchors = np.array(
             [
                 detections.get_anchors_coordinates(anchor)
                 for anchor in self.triggering_anchors
             ]
         )
+        
+        # Reshape all_anchors to handle 3D arrays
+        # all_anchors is now shape (num_anchors, num_detections, 1, 2)
+        # We need to reshape it to work with cross_product function
+        all_anchors_reshaped = all_anchors.reshape(all_anchors.shape[0], all_anchors.shape[1], 2)
 
-        cross_products_1 = cross_product(all_anchors, self.limits[0])
-        cross_products_2 = cross_product(all_anchors, self.limits[1])
+        cross_products_1 = cross_product(all_anchors_reshaped, self.limits[0])
+        cross_products_2 = cross_product(all_anchors_reshaped, self.limits[1])
 
         # Works because limit vectors are pointing in opposite directions
         in_limits = (cross_products_1 > 0) == (cross_products_2 > 0)
         in_limits = np.all(in_limits, axis=0)
 
-        triggers = cross_product(all_anchors, self.vector) < 0
+        triggers = cross_product(all_anchors_reshaped, self.vector) < 0
         has_any_left_trigger = np.any(triggers, axis=0)
         has_any_right_trigger = np.any(~triggers, axis=0)
 

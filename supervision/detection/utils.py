@@ -1177,7 +1177,8 @@ def cross_product(anchors: np.ndarray, vector: Vector) -> np.ndarray:
     """
     Get array of cross products of each anchor with a vector.
     Args:
-        anchors: Array of anchors of shape (number of anchors, detections, 2)
+        anchors: Array of anchors of shape (number of anchors, detections, 2) for 2D arrays
+            or (number of anchors, detections, 1, 2) for 3D arrays (NumPy 2.0 format)
         vector: Vector to calculate cross product with
 
     Returns:
@@ -1187,7 +1188,21 @@ def cross_product(anchors: np.ndarray, vector: Vector) -> np.ndarray:
         [vector.end.x - vector.start.x, vector.end.y - vector.start.y]
     )
     vector_start = np.array([vector.start.x, vector.start.y])
-    return np.cross(vector_at_zero, anchors - vector_start)
+    
+    # Handle both 2D and 3D arrays
+    if len(anchors.shape) == 4:  # 3D array format (num_anchors, num_detections, 1, 2)
+        # Reshape to (num_anchors, num_detections, 2) for cross product calculation
+        anchors_reshaped = anchors.reshape(anchors.shape[0], anchors.shape[1], 2)
+        # Manual cross product calculation to avoid NumPy 2.0 deprecation warning
+        # For 2D vectors [x1, y1] and [x2, y2], the cross product is x1*y2 - y1*x2
+        anchors_shifted = anchors_reshaped - vector_start
+        return (vector_at_zero[0] * anchors_shifted[:, :, 1] - 
+                vector_at_zero[1] * anchors_shifted[:, :, 0])
+    else:  # 2D array format (num_anchors, num_detections, 2)
+        # Manual cross product calculation to avoid NumPy 2.0 deprecation warning
+        anchors_shifted = anchors - vector_start
+        return (vector_at_zero[0] * anchors_shifted[:, :, 1] - 
+                vector_at_zero[1] * anchors_shifted[:, :, 0])
 
 
 def spread_out_boxes(

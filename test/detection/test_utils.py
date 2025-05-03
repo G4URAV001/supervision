@@ -765,7 +765,7 @@ def test_scale_boxes(
                     ]
                 ]
             ),
-            np.array([[0, 0]]),
+            np.array([[[0, 0]]]),
             DoesNotRaise(),
         ),  # single mask with all zeros
         (
@@ -779,7 +779,7 @@ def test_scale_boxes(
                     ]
                 ]
             ),
-            np.array([[2, 2]]),
+            np.array([[[2, 2]]]),
             DoesNotRaise(),
         ),  # single mask with all ones
         (
@@ -793,7 +793,7 @@ def test_scale_boxes(
                     ]
                 ]
             ),
-            np.array([[2, 2]]),
+            np.array([[[2, 2]]]),
             DoesNotRaise(),
         ),  # single mask with symmetric ones
         (
@@ -807,7 +807,7 @@ def test_scale_boxes(
                     ]
                 ]
             ),
-            np.array([[3, 2]]),
+            np.array([[[3, 2]]]),
             DoesNotRaise(),
         ),  # single mask with asymmetric ones
         (
@@ -827,7 +827,7 @@ def test_scale_boxes(
                     ],
                 ]
             ),
-            np.array([[2, 2], [3, 2]]),
+            np.array([[[2, 2]], [[3, 2]]]),
             DoesNotRaise(),
         ),  # two masks
     ],

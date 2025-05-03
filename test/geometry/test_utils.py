@@ -13,7 +13,7 @@ def generate_test_polygon(n: int) -> np.ndarray:
          n (int): amount of points in polygon
 
      Returns:
-         Polygon: test polygon in the form of a semicircle.
+         Polygon: test polygon in the form of a semicircle with shape (n, 1, 2).
 
     Examples:
          ```python
@@ -30,6 +30,9 @@ def generate_test_polygon(n: int) -> np.ndarray:
     x_axis = np.linspace(0, 2 * r, n)
     y_axis = (r**2 - (x_axis - r) ** 2) ** 0.5 + 2 * r
     polygon = np.array([x_axis, y_axis]).T
+    
+    # Always convert to 3D array with shape (n, 1, 2) for NumPy 2.0 compatibility
+    polygon = polygon.reshape(polygon.shape[0], 1, 2)
 
     return polygon
 
@@ -37,6 +40,7 @@ def generate_test_polygon(n: int) -> np.ndarray:
 @pytest.mark.parametrize(
     "polygon, expected_result",
     [
+        # All tests now use 3D arrays for NumPy 2.0 compatibility
         (generate_test_polygon(10), Point(x=5.0, y=12.0)),
         (generate_test_polygon(50), Point(x=25.0, y=61.0)),
         (generate_test_polygon(100), Point(x=50.0, y=121.0)),

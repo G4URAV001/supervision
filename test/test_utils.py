@@ -14,6 +14,7 @@ def mock_detections(
     class_id: Optional[List[int]] = None,
     tracker_id: Optional[List[int]] = None,
     data: Optional[Dict[str, List[Any]]] = None,
+    use_3d_arrays: bool = True,  # Default to using 3D arrays for NumPy 2.0 compatibility
 ) -> Detections:
     def convert_data(data: Dict[str, List[Any]]):
         return {k: np.array(v) for k, v in data.items()}
